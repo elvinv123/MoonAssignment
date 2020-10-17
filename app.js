@@ -1,14 +1,25 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
-const db = require('./config/keys').mongoURI;
+const db = require("./config/keys").mongoURI;
+const bodyParser = require('body-parser');
+
+const users = require("./routes/api/users");
+const books = require("./routes/api/books");
+const reviews = require("./routes/api/reviews");
 
 mongoose
-    .connect(db, { useNewUrlParser: true })
+    .connect(db, { useUnifiedTopology: true }, { useNewUrlParser: true })
     .then(() => console.log("Connected to MongoDB successfully"))
     .catch(err => console.log(err));
-    
+
 app.get("/", (req, res) => res.send("Hello Wocsdrld"));
+app.use("/api/users", users);
+app.use("/api/books", books);
+app.use("/api/reviews", reviews);
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const port = process.env.PORT || 5000;
 
