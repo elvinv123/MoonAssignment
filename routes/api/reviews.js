@@ -48,11 +48,15 @@ router.post('/',
             .then(book => {
 
                 let sameAuthor = false;
-                book.reviews.forEach( review =>{
-                    if(req.user._id.toString() === review.author.toString()){
-                        sameAuthor = true;
-                    }
-                })
+                if(book){
+                    book.reviews.forEach( review =>{
+                        if(req.user._id.toString() === review.author.toString()){
+                            sameAuthor = true;
+                        }
+                    })
+                }else{
+                    return res.status(400).json({ book: "this book does not exist" }) 
+                }
 
                 if(book && !sameAuthor){
                     book.reviews.push({
@@ -61,7 +65,7 @@ router.post('/',
                         book: req.body.book
                     })
                 }else{
-                    return res.status(400).json({ email: "this book does not exist" }) 
+                    return res.status(400).json({ book: "this book does not exist, or you have already posted a review for this book" }) 
                 }
 
                 book.save()
@@ -84,12 +88,12 @@ router.patch('/:id',
 
         Book.findById(req.body.book)
             .then(book => {
-                const review = book.reviews.id(req.params.id);
-                
-                if (book && req.user._id.toString() === review.author.toString()) {
-                    review.text = req.body.text;
+                // const review = book.reviews.id(req.params.id);
+                //simplify the following
+                if (book && req.user._id.toString() === book.reviews.id(req.params.id).author.toString()) {
+                    book.reviews.id(req.params.id).text = req.body.text;
                 } else {
-                    return res.status(400).json({ email: "this book does not exist or you didnt author this review" })
+                    return res.status(400).json({ email: "this book does not exist or you didn't author this review" })
                 }
 
                 book.save()
@@ -106,11 +110,10 @@ router.delete('/:id',
 
         Book.findById(req.body.book)
             .then(book => {
-                const review = book.reviews.id(req.params.id);
-
-                if (review && book && req.user._id.toString() === review.author.toString()) {
-                
-                const index = book.reviews.indexOf(review);
+                // const review = book.reviews.id(req.params.id);
+                //simplify the following
+                if (book && book.reviews.id(req.params.id) && req.user._id.toString() === book.reviews.id(req.params.id).author.toString()) {
+                    const index = book.reviews.indexOf(book.reviews.id(req.params.id));
                     book.reviews[index].remove();
                 } else {
                     return res.status(400).json({ email: "this book does not exist, you didnt author this review, or this review doesnt exist" })
