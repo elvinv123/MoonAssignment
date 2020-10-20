@@ -5,11 +5,9 @@ const db = require("./config/keys").mongoURI;
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
-
 const users = require("./routes/api/users");
 const books = require("./routes/api/books");
 const reviews = require("./routes/api/reviews");
-const User = require("./models/User");
 
 mongoose
     .connect(db, { useUnifiedTopology: true }, { useNewUrlParser: true })
@@ -26,7 +24,6 @@ app.use("/api/books", books);
 app.use("/api/reviews", reviews);
 
 app.use(passport.initialize());
-
 
 require('./config/passport')(passport);
 

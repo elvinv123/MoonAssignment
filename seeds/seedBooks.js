@@ -1,7 +1,7 @@
 const Book = require("../models/Book");
 const mongoose = require("mongoose");
 const db = require("../config/keys").mongoURI;
-//create your array. i inserted only 1 object here
+
 const books = [
     new Book({
         title: "28 SUMMERS",
@@ -64,6 +64,7 @@ const books = [
         cover: "https://s1.nyt.com/du/books/images/9781984826787.jpg",
     })
 ]
+
 //connect mongoose
 mongoose
     .connect(db, { useUnifiedTopology: true }, { useNewUrlParser: true })
