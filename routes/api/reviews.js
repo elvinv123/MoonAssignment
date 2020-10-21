@@ -5,12 +5,15 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
 
-const Book = require('../../models/Book');
+const Book = require('../../models/Book'); // Book model
 const validateReviewInput = require('../../validation/reviews');
 
-// tested works
-//posts reviews on a book if a registered user is logged in
-// have to find a way to check if the author exists
+//Allows logged in users to post review
+//Body of request must have book as key and id of book as value, text as key and review of the book as value
+//Passport added as middleware function to protect route, allowing access to only users who are logged in
+//Corresponding JSON web token must be added as Authorization header in request to have access
+//Request (req) object will have a user key that will be the current user based on JSON web token
+
 router.post('/',
     passport.authenticate('jwt', { session: false }),
     
@@ -27,7 +30,6 @@ router.post('/',
                 let sameAuthor = false;
                 if(book){
                     book.reviews.forEach( review =>{
-                        //try returning here if found same author try Array find() try making function to do this
                         if(req.user._id.toString() === review.author.toString()){
                             sameAuthor = true;
                         }
@@ -53,8 +55,10 @@ router.post('/',
     }
 );
 
-//tested works
-//lets you edit reviews when logged in
+//Allows logged in users to edit their own review
+//Body of request must have book as key and id of book as value, text as key and review of the book as value, id of review as a parameter
+//Passport added as middleware function to protect route, allowing access to only users who are logged in
+
 router.patch('/:id',
     passport.authenticate('jwt', { session: false }),
     (req, res) => {
@@ -66,8 +70,7 @@ router.patch('/:id',
 
         Book.findById(req.body.book)
             .then(book => {
-                // const review = book.reviews.id(req.params.id);
-                //simplify the following
+                
                 if (book && req.user._id.toString() === book.reviews.id(req.params.id).author.toString()) {
                     book.reviews.id(req.params.id).text = req.body.text;
                 } else {
@@ -81,15 +84,18 @@ router.patch('/:id',
 
     }
 );
-//works tested functions 100%
+
+//Allows logged in users to delete their own review
+//Body of request must have book as key and id of book as value, id of review as a parameter
+//Passport added as middleware function to protect route, allowing access to only users who are logged in
+
 router.delete('/:id',
     passport.authenticate('jwt', { session: false }),
     (req, res) => {        
 
         Book.findById(req.body.book)
             .then(book => {
-                // const review = book.reviews.id(req.params.id);
-                //simplify the following
+                
                 if (book && book.reviews.id(req.params.id) && req.user._id.toString() === book.reviews.id(req.params.id).author.toString()) {
                     const index = book.reviews.indexOf(book.reviews.id(req.params.id));
                     book.reviews[index].remove();

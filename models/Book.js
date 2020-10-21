@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema; //Mongoose schema object used to define new schemas
 
 const Reviews = new Schema({
     author: {
@@ -40,4 +40,5 @@ const BookSchema = new Schema({
     }
 });
 
+//Passing the model name and the user schema into the mongoose model function
 module.exports = Book = mongoose.model('book', BookSchema);
