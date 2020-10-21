@@ -3,15 +3,15 @@ const router = express.Router();
 const User = require('../../models/User'); // User model
 const bcrypt = require('bcryptjs'); // Used to salt and hash password
 const keys = require('../../config/keys');
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
+const jwt = require('jsonwebtoken'); 
+const passport = require('passport'); 
 
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
 
 
 // Allows a new user to register for an account
-// body of request must have email, password, and password 2
+// Body of request must have 'email', 'password', and 'password 2' as keys with the corresponding values as your input
 router.post('/register', (req, res) => {
 
     // Validates inputs within the body of the request
@@ -21,7 +21,6 @@ router.post('/register', (req, res) => {
         return res.status(400).json(errors);
     }
 
-    
     // Check to make sure nobody has already registered with a duplicate email
     User.findOne({ email: req.body.email })
         .then(user => {
@@ -49,9 +48,10 @@ router.post('/register', (req, res) => {
         })
 })
 
-//Allows registered users to login with their email and password.
-//Returns JSON web tokens to be used for protected routes
-//Body of request must have email password 
+// Allows registered users to login with their email and password.
+// Returns JSON web tokens to be used for protected routes
+// Body of request must have 'email' 'password' as keys with the corresponding values as your input
+
 router.post('/login', (req,res) =>{
     const email = req.body.email;
     const password = req.body.password;
@@ -98,9 +98,10 @@ router.post('/login', (req,res) =>{
         })
 })
 
-//Passport added as middleware function to protect route, allowing access to only users who are logged in
-//Corresponding JSON web token must be added as Authorization header in request to have access
-//Request (req) object will have a user key that will be the current user based on JSON web token
+// Passport added as middleware function to protect route, allowing access to only users who are logged in
+// Corresponding JSON web token must be added as Authorization header in request to have access
+// Request (req) object will have a user key that will be the current user based on JSON web token
+
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
     res.json({
         id: req.user.id,

@@ -5,7 +5,7 @@ const User = mongoose.model('users'); // User model
 const keys = require('../config/keys'); 
 
 const options = {}; 
-options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken(); // Extracting jwt from authorisation header
+options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken(); // Extracting JSON web tokens from authorization header
 options.secretOrKey = keys.secretOrKey; // Check to see if signed
 
 module.exports = passport => {

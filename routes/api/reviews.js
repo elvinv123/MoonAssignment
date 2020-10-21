@@ -8,8 +8,8 @@ const jwt = require('jsonwebtoken');
 const Book = require('../../models/Book'); // Book model
 const validateReviewInput = require('../../validation/reviews');
 
-//Allows logged in users to post review
-//Body of request must have book as key and id of book as value, text as key and review of the book as value
+//Allows logged in users to post a review
+//Body of request must have 'book' as key and id of book as value, 'text' as key and review of the book as value
 //Passport added as middleware function to protect route, allowing access to only users who are logged in
 //Corresponding JSON web token must be added as Authorization header in request to have access
 //Request (req) object will have a user key that will be the current user based on JSON web token
@@ -56,7 +56,7 @@ router.post('/',
 );
 
 //Allows logged in users to edit their own review
-//Body of request must have book as key and id of book as value, text as key and review of the book as value, id of review as a parameter
+//Body of request must have 'book' as key and id of book as value, 'text' as key and review of the book as value, id of review as a parameter
 //Passport added as middleware function to protect route, allowing access to only users who are logged in
 
 router.patch('/:id',
@@ -81,12 +81,11 @@ router.patch('/:id',
                     .then(review => res.json(review))
                     .catch(err => console.log(err));
             })
-
     }
 );
 
 //Allows logged in users to delete their own review
-//Body of request must have book as key and id of book as value, id of review as a parameter
+//Body of request must have 'book' as key and id of book as value, id of review as a parameter
 //Passport added as middleware function to protect route, allowing access to only users who are logged in
 
 router.delete('/:id',
@@ -107,7 +106,6 @@ router.delete('/:id',
                     .then(review => res.json(review))
                     .catch(err => console.log(err));
             })
-
     }
 );
 

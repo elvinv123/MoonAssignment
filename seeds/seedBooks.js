@@ -1,3 +1,4 @@
+// Seed file used to seed database with books provided in text file
 const Book = require("../models/Book");
 const mongoose = require("mongoose");
 const db = require("../config/keys").mongoURI;

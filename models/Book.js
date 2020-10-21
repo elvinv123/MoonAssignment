@@ -16,6 +16,7 @@ const Reviews = new Schema({
     }
 });
 
+// Reviews are embedded within book documents
 const BookSchema = new Schema({
     title: {
         type: String,
@@ -40,5 +41,5 @@ const BookSchema = new Schema({
     }
 });
 
-//Passing the model name and the user schema into the mongoose model function
+//Passing the model name and the book schema into the mongoose model function
 module.exports = Book = mongoose.model('book', BookSchema);
